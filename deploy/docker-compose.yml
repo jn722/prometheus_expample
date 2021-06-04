@@ -1,0 +1,22 @@
+version: "2.0"
+
+services:
+    app:
+        image: alpine:3.12
+        restart: always
+        ports:
+            - 2112:2112
+        volumes: 
+            - "../bin/:/app"
+        entrypoint: /app/prom_test
+        links:
+            - prometheus
+
+    prometheus:
+        image: prom/prometheus
+        restart: always
+        command: --web.enable-admin-api --config.file="/etc/prometheus/prometheus.yml"
+        ports:
+            - 9091:9090
+        volumes:
+            - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
